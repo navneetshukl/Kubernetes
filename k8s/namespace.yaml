@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: task-system
+  labels:
+    team: backend
+    environment: production
