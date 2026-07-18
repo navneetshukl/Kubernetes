@@ -9,11 +9,11 @@ spec:
   replicas: 3
   selector: 
     matchLabels:
-      app: task-api
+      app: task-api-pod
   template:
     metadata:
       labels:
-        app: task-api
+        app: task-api-pod
     spec:
       containers:
       - name: task-api
