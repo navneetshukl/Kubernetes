@@ -1,4 +1,4 @@
-module kubernetes
+module task-api
 
 go 1.25.1
 
