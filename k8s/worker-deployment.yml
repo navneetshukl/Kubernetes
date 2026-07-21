@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-worker-deployment
+  namespace: task-system
+  labels:
+    app: task-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: task-worker-pod
+  template:
+    metadata:
+      labels:
+        app: task-worker-pod
+    spec:
+      containers:
+      - name: worker
+        image: api-worker:latest
+        imagePullPolicy: Never
+        env:
+        - name: TASK_API_URL
+          value: "http://task-api-service:80"
+        
+

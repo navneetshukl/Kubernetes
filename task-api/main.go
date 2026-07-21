@@ -52,6 +52,7 @@ func (t *TaskApi) CreateTask(ctx *gin.Context) {
 }
 
 func (t *TaskApi) GetTask(ctx *gin.Context) {
+	log.Println("inside get task")
 	var tasks []Task
 
 	t.mut.Lock()
@@ -69,7 +70,10 @@ func (t *TaskApi) GetTask(ctx *gin.Context) {
 func main() {
 
 	mux := gin.New()
+	mux.Use(gin.Logger())
+    mux.Use(gin.Recovery())
 	taksController := NewTaskApi()
+	
 	mux.POST("/task/add", taksController.CreateTask)
 	mux.GET("/task/get", taksController.GetTask)
 	err:=mux.Run(":8080")
