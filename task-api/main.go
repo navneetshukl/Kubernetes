@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -18,14 +18,12 @@ type Task struct {
 }
 
 type TaskApi struct {
-	taskStore map[string]Task
-	mut       *sync.Mutex
+	db DBServiceImpl
 }
 
-func NewTaskApi() *TaskApi {
+func NewTaskApi(db DBServiceImpl) *TaskApi {
 	return &TaskApi{
-		taskStore: make(map[string]Task),
-		mut:       &sync.Mutex{},
+		db: db,
 	}
 }
 
@@ -42,9 +40,13 @@ func (t *TaskApi) CreateTask(ctx *gin.Context) {
 	newTask.Status = "Pending"
 	newTask.CreatedAt = time.Now()
 
-	t.mut.Lock()
-	t.taskStore[newTask.ID] = newTask
-	t.mut.Unlock()
+	err = t.db.InsertTask(newTask)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "task added successfully",
 	})
@@ -53,13 +55,14 @@ func (t *TaskApi) CreateTask(ctx *gin.Context) {
 
 func (t *TaskApi) GetTask(ctx *gin.Context) {
 	log.Println("inside get task")
-	var tasks []Task
 
-	t.mut.Lock()
-	for _, v := range t.taskStore {
-		tasks = append(tasks, v)
+	tasks, err := t.db.GetAllTasks()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
 	}
-	t.mut.Unlock()
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "task fetched successfully",
 		"data":    tasks,
@@ -68,17 +71,25 @@ func (t *TaskApi) GetTask(ctx *gin.Context) {
 }
 
 func main() {
+	dsn := os.Getenv("DSN")
+	db, err := connectToDb(dsn)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	repo := NewDBService(db)
 
 	mux := gin.New()
 	mux.Use(gin.Logger())
-    mux.Use(gin.Recovery())
-	taksController := NewTaskApi()
-	
+	mux.Use(gin.Recovery())
+	taksController := NewTaskApi(repo)
+
 	mux.POST("/task/add", taksController.CreateTask)
 	mux.GET("/task/get", taksController.GetTask)
-	err:=mux.Run(":8080")
-	if err!=nil{
-		log.Println("error in running the application ",err)
+	err = mux.Run(":8080")
+	if err != nil {
+		log.Println("error in running the application ", err)
 		return
 	}
 
