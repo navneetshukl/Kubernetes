@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: task-api-deployment
-  namespace: task-system
+  #namespace: task-system
   labels:
     app: task-api
 spec:
-  replicas: 2
+  replicas: 1
   selector: 
     matchLabels:
       app: task-api-pod
@@ -21,3 +21,9 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
+        env:
+        - name: DSN
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DSN

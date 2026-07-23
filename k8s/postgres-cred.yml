@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  DB_NAME: "taskdb"
+  DB_PORT: "5432"
+  DB_HOST: "postgres-service"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+stringData:
+  DB_USER: "admin"
+  DB_PASSWORD: "admin"
+  DSN: "postgres://admin:admin@postgres-service:5433/taskdb?sslmode=disable"

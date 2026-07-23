@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: task-worker-deployment
-  namespace: task-system
+  #namespace: task-system
   labels:
     app: task-worker
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: task-worker-pod
