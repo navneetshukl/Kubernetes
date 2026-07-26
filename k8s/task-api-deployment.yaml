@@ -15,6 +15,16 @@ spec:
       labels:
         app: task-api-pod
     spec:
+      initContainers:
+      - name: db-migration
+        image: db-migration:latest
+        imagePullPolicy: Never
+        env:
+        - name: DSN
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DSN
       containers:
       - name: task-api
         image: task-api:latest
