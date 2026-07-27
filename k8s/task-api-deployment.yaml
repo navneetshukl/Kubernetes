@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
       - name: db-migration
-        image: db-migration:latest
+        image: db-migration:v1
         imagePullPolicy: Never
         env:
         - name: DSN

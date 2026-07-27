@@ -10,16 +10,16 @@ import (
 )
 
 func main() {
-	dbURL := os.Getenv("DATABASE_URL")
+	dbURL := os.Getenv("DSN")
 	if dbURL == "" {
-		log.Fatal("DATABASE_URL environment variable is required")
+		log.Fatal("DSN environment variable is required")
 	}
 
 	var db *sql.DB
 	var err error
 
 	// Retry connecting until DB is responsive
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		db, err = sql.Open("postgres", dbURL)
 		if err == nil {
 			err = db.Ping()
@@ -28,6 +28,7 @@ func main() {
 			break
 		}
 		log.Printf("Database not ready yet... retrying (%d/10)", i+1)
+		log.Println("error is ",err)
 		time.Sleep(2 * time.Second)
 	}
 
@@ -43,7 +44,7 @@ func main() {
 	CREATE TABLE IF NOT EXISTS tasks (
 		id SERIAL PRIMARY KEY,
 		title VARCHAR(255) NOT NULL,
-		completed BOOLEAN DEFAULT false,
+		status BOOLEAN DEFAULT false,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`
 
