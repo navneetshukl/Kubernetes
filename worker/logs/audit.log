@@ -1,0 +1,102 @@
+========================================
+AUDIT EVENT : WORKER_LIFECYCLE
+TIMESTAMP   : 2026-08-22T09:50:18Z
+STATUS      : SUCCESS
+Details     : Worker daemon booted successfully
+Target URL  : http://localhost:8080
+========================================
+
+========================================
+AUDIT EVENT : API_HTTP_ERROR
+TIMESTAMP   : 2026-08-22T09:50:22Z
+STATUS      : FAILURE
+Endpoint    : http://localhost:8080/task/get
+Status Code : 400
+API Payload : {"error":{"Severity":"ERROR","Code":"42P01","Message":"relation \"tasks\" does not exist","Detail":"","Hint":"","Position":"43","InternalPosition":"","InternalQuery":"","Where":"","Schema":"","Table":"","Column":"","DataTypeName":"","Constraint":"","File":"parse_relation.c","Line":"1466","Routine":"parserOpenTable"}}
+========================================
+
+========================================
+AUDIT EVENT : API_HTTP_ERROR
+TIMESTAMP   : 2026-08-22T09:50:26Z
+STATUS      : FAILURE
+Endpoint    : http://localhost:8080/task/get
+Status Code : 400
+API Payload : {"error":{"Severity":"ERROR","Code":"42P01","Message":"relation \"tasks\" does not exist","Detail":"","Hint":"","Position":"43","InternalPosition":"","InternalQuery":"","Where":"","Schema":"","Table":"","Column":"","DataTypeName":"","Constraint":"","File":"parse_relation.c","Line":"1466","Routine":"parserOpenTable"}}
+========================================
+
+========================================
+AUDIT EVENT : API_HTTP_ERROR
+TIMESTAMP   : 2026-08-22T09:50:30Z
+STATUS      : FAILURE
+Endpoint    : http://localhost:8080/task/get
+Status Code : 400
+API Payload : {"error":{"Severity":"ERROR","Code":"42P01","Message":"relation \"tasks\" does not exist","Detail":"","Hint":"","Position":"43","InternalPosition":"","InternalQuery":"","Where":"","Schema":"","Table":"","Column":"","DataTypeName":"","Constraint":"","File":"parse_relation.c","Line":"1466","Routine":"parserOpenTable"}}
+========================================
+
+========================================
+AUDIT EVENT : API_HTTP_ERROR
+TIMESTAMP   : 2026-08-22T09:50:34Z
+STATUS      : FAILURE
+Endpoint    : http://localhost:8080/task/get
+Status Code : 400
+API Payload : {"error":{"Severity":"ERROR","Code":"42P01","Message":"relation \"tasks\" does not exist","Detail":"","Hint":"","Position":"43","InternalPosition":"","InternalQuery":"","Where":"","Schema":"","Table":"","Column":"","DataTypeName":"","Constraint":"","File":"parse_relation.c","Line":"1466","Routine":"parserOpenTable"}}
+========================================
+
+========================================
+AUDIT EVENT : WORKER_LIFECYCLE
+TIMESTAMP   : 2026-08-22T09:50:37Z
+STATUS      : SUCCESS
+Details     : Worker received termination signal and stopped gracefully
+========================================
+
+========================================
+AUDIT EVENT : WORKER_LIFECYCLE
+TIMESTAMP   : 2026-08-22T09:51:50Z
+STATUS      : SUCCESS
+Details     : Worker daemon booted successfully
+Target URL  : http://localhost:8080
+========================================
+
+========================================
+AUDIT EVENT : QUEUE_POLL
+TIMESTAMP   : 2026-08-22T09:51:54Z
+STATUS      : SUCCESS
+API Message : task fetched successfully
+Total Items : 0
+Details     : Queue clear. No pending tasks found.
+========================================
+
+========================================
+AUDIT EVENT : QUEUE_POLL
+TIMESTAMP   : 2026-08-22T09:51:58Z
+STATUS      : SUCCESS
+API Message : task fetched successfully
+Total Items : 0
+Details     : Queue clear. No pending tasks found.
+========================================
+
+========================================
+AUDIT EVENT : QUEUE_POLL
+TIMESTAMP   : 2026-08-22T09:52:02Z
+STATUS      : SUCCESS
+API Message : task fetched successfully
+Total Items : 0
+Details     : Queue clear. No pending tasks found.
+========================================
+
+========================================
+AUDIT EVENT : QUEUE_POLL
+TIMESTAMP   : 2026-08-22T09:52:06Z
+STATUS      : SUCCESS
+API Message : task fetched successfully
+Total Items : 0
+Details     : Queue clear. No pending tasks found.
+========================================
+
+========================================
+AUDIT EVENT : WORKER_LIFECYCLE
+TIMESTAMP   : 2026-08-22T09:52:10Z
+STATUS      : SUCCESS
+Details     : Worker received termination signal and stopped gracefully
+========================================
+
