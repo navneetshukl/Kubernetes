@@ -15,12 +15,32 @@ spec:
       labels:
         app: task-worker-pod
     spec:
+
+      volumes:
+      - name: shared-logs
+        emptyDir: {}
+
       containers:
       - name: worker
-        image: api-worker:latest
+        image: worker:latest
         imagePullPolicy: Never
         env:
         - name: TASK_API_URL
           value: "http://task-api-service:80"
+
+        # 2. Mount the volume for the worker to write to
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /app/logs
+
+      - name: sidecar
+        image:  sidecar:latest
+        imagePullPolicy: Never
+
+        # 3. Mount the same volume for the sidecar to read from
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /app/logs
+          readOnly: true
         
 
