@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: notification-api-pod
+  labels:
+    app: notification-api
+spec:
+  containers:
+  - name: notification-api
+    image: notification-api:latest
+    imagePullPolicy: Never
+    ports:
+    - containerPort: 8080
+  restartPolicy: Always

@@ -1,0 +1,30 @@
+1. Load image in minikube node
+minikube image load notification-api:latest
+
+2. Describe pod status
+kubectl describe pod notification-api-pod
+
+3. Logs inside pod
+kubectl logs notification-api-pod
+
+4. Delete image from minikube
+minikube image rm notification-api:latest
+
+5. Testing curl command
+
+# Create notification
+curl -X POST http://localhost:8080/notifications \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "101", "message": "Your order has shipped"}'
+
+# Get all notifications
+curl -X GET http://localhost:8080/notifications
+
+# Test validation error
+curl -X POST http://localhost:8080/notifications \
+  -H "Content-Type: application/json" \
+  -d '{}'
+
+6. Enter inside the pod
+kubectl exec -it <pod-name> -- /bin/sh
+
