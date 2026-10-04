@@ -13,7 +13,7 @@ minikube image rm notification-api:latest
 5. Testing curl command
 
 # Create notification
-curl -X POST http://10.244.0.47:8080/notifications \
+curl -X POST http://notification-api-service:8000/notifications \
   -H "Content-Type: application/json" \
   -d '{"user_id": "101", "message": "Your order has shipped"}'
 
@@ -21,7 +21,7 @@ curl -X POST http://10.244.0.47:8080/notifications \
 curl -X GET http://localhost:8080/notifications
 
 # Test validation error
-curl -X POST http://localhost:8080/notifications \
+curl -X POST http://notification-api-service:8000/notifications \
   -H "Content-Type: application/json" \
   -d '{}'
 

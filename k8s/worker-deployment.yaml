@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-worker
+  template:
+    metadata:
+      labels:
+        app: notification-worker
+    spec:
+      containers:
+      - name: notification-worker
+        image: notification-worker:latest
+        imagePullPolicy: Never
+        env:
+        - name: API_URL
+          value: "http://notification-api-service:8000"
+        - name: POLL_INTERVAL
+          value: "20s"
