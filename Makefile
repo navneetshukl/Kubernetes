@@ -70,8 +70,8 @@ status:
 	@echo "=== Minikube Images ==="
 	@minikube image ls | grep -E "notification-api|notification-worker" || echo "No notification images found"
 	@echo ""
-	@echo "=== Kubernetes Deployments ==="
-	@kubectl get deployments -l app=notification-api,app=notification-worker 2>/dev/null || kubectl get deployments
+	@echo "=== Kubernetes Pods (all) ==="
+	@kubectl get pods  2>/dev/null || true
 
 # Help
 help:
