@@ -73,6 +73,9 @@ status:
 	@echo "=== Kubernetes Pods (all) ==="
 	@kubectl get pods  2>/dev/null || true
 
+remove:
+	kubectl delete all --all
+
 # Help
 help:
 	@echo "Available targets:"

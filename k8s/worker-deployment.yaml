@@ -16,8 +16,6 @@ spec:
       - name: notification-worker
         image: notification-worker:latest
         imagePullPolicy: Never
-        env:
-        - name: API_URL
-          value: "http://notification-api-service:8000"
-        - name: POLL_INTERVAL
-          value: "20s"
+        envFrom:
+        - configMapRef:
+            name: notification-worker-config
