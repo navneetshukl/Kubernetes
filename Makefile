@@ -3,14 +3,17 @@
 # Image names
 API_IMAGE := notification-api:latest
 WORKER_IMAGE := notification-worker:latest
+SIDECAR_IMAGE:=	notification-sidecar:latest
 
 # Dockerfile paths
 API_DOCKERFILE := notification-api/api.dockerfile
 WORKER_DOCKERFILE := notification-worker/worker.dockerfile
+SIDECAR_DOCKERFILE:= notification-sidecar/sidecar.dockerfile
 
 # Build context directories
 API_CONTEXT := notification-api
 WORKER_CONTEXT := notification-worker
+SIDECAR_CONTEXT:= notification-sidecar
 
 .PHONY: all build clean load push deploy help
 
@@ -28,11 +31,16 @@ build-worker:
 	@echo "Building Worker image..."
 	docker build -f $(WORKER_DOCKERFILE) -t $(WORKER_IMAGE) $(WORKER_CONTEXT)
 
+build-sidecar:
+	@echo "Building Sidecar image..."
+	docker build -f $(SIDECAR_DOCKERFILE) -t $(SIDECAR_IMAGE) $(SIDECAR_CONTEXT)
+
 # Delete images from minikube
 clean:
 	@echo "Deleting images from minikube..."
 	-minikube image rm $(API_IMAGE) 2>/dev/null || true
 	-minikube image rm $(WORKER_IMAGE) 2>/dev/null || true
+	-minikube image rm $(SIDECAR_IMAGE) 2>/dev/null || true
 
 # Load images into minikube (equivalent to push for minikube)
 load: load-api load-worker
@@ -44,6 +52,10 @@ load-api:
 load-worker:
 	@echo "Loading Worker image into minikube..."
 	minikube image load $(WORKER_IMAGE)
+
+load-sidecar:
+	@echo "Loading Sidecar image into minikube..."
+	minikube image load $(SIDECAR_IMAGE)
 
 # Alias for load (more intuitive name)
 push: load

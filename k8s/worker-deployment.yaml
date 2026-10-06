@@ -16,6 +16,9 @@ spec:
       - name: notification-worker
         image: notification-worker:latest
         imagePullPolicy: Never
+      - name: notification-sidecar
+        image: notification-sidecar:latest
+        imagePullPolicy: Never
         envFrom:
         - configMapRef:
             name: notification-worker-config

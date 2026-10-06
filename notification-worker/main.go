@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -24,6 +25,29 @@ const (
 	StatusCompleted  NotificationStatus = "completed"
 )
 
+var logFile *os.File
+var logWriter *log.Logger
+
+// initLogFile creates the log directory and opens the log file
+func initLogFile() error {
+	// Store logs in a relative logs directory
+	logDir := "logs"
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		return fmt.Errorf("failed to create log directory: %w", err)
+	}
+
+	logPath := filepath.Join(logDir, "worker.log")
+	var err error
+	logFile, err = os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to open log file: %w", err)
+	}
+
+	// Custom log format: YYYY-MM-DD processed notification <user_id>
+	logWriter = log.New(logFile, "", 0)
+	return nil
+}
+
 // processNotification simulates processing: pending -> processing -> completed
 func processNotification(n Notification) {
 	// Step 1: pending
@@ -35,6 +59,12 @@ func processNotification(n Notification) {
 
 	// Step 3: completed
 	log.Printf("[worker] status=processing -> completed for user_id=%s", n.UserID)
+
+	// Write simple log to file: YYYY-MM-DD HH:MM:SS processed notification <user_id>
+	if logWriter != nil {
+		dateStr := time.Now().Format("2006-01-02 15:04:05")
+		logWriter.Printf("%s processed notification %s", dateStr, n.UserID)
+	}
 }
 
 // fetchPendingNotifications calls GET /notifications and returns pending ones
@@ -73,6 +103,12 @@ func runOnce(apiURL string) {
 }
 
 func main() {
+	// Initialize log file
+	if err := initLogFile(); err != nil {
+		log.Fatalf("failed to initialize log file: %v", err)
+	}
+	defer logFile.Close()
+
 	apiURL := getEnv("API_URL", "http://localhost:8080")
 	interval := getEnvDuration("POLL_INTERVAL", 5*time.Second)
 
