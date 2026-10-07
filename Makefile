@@ -21,7 +21,7 @@ SIDECAR_CONTEXT:= notification-sidecar
 all: build load
 
 # Build both Docker images
-build: build-api build-worker
+build: build-api build-worker build-sidecar
 
 build-api:
 	@echo "Building API image..."
@@ -43,7 +43,7 @@ clean:
 	-minikube image rm $(SIDECAR_IMAGE) 2>/dev/null || true
 
 # Load images into minikube (equivalent to push for minikube)
-load: load-api load-worker
+load: load-api load-worker load-sidecar
 
 load-api:
 	@echo "Loading API image into minikube..."
@@ -74,13 +74,21 @@ restart:
 	kubectl rollout restart deployment/notification-api-deployment
 	kubectl rollout restart deployment/notification-worker-deployment
 
+restart-api:
+	@echo "Restarting api deployments..."
+	kubectl rollout restart deployment/notification-api-deployment
+
+restart-worker:
+	@echo "Restarting worker deployments..."
+	kubectl rollout restart deployment/notification-worker-deployment
+
 # Full rebuild and deploy
 redeploy: rebuild deploy restart
 
 # Show status
 status:
 	@echo "=== Minikube Images ==="
-	@minikube image ls | grep -E "notification-api|notification-worker" || echo "No notification images found"
+	@minikube image ls | grep -E "notification-api|notification-worker|notification-sidecar" || echo "No notification images found"
 	@echo ""
 	@echo "=== Kubernetes Pods (all) ==="
 	@kubectl get pods  2>/dev/null || true

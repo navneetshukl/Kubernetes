@@ -17,6 +17,14 @@ curl -X POST http://notification-api-service:8000/notifications \
   -H "Content-Type: application/json" \
   -d '{"user_id": "101", "message": "Your order has shipped"}'
 
+  curl -X POST http://notification-api-service:8000/notifications \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "102", "message": "Your order has shipped"}'
+
+  curl -X POST http://notification-api-service:8000/notifications \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "103", "message": "Your order has shipped"}'
+
 # Get all notifications
 curl -X GET http://localhost:8080/notifications
 
@@ -28,3 +36,8 @@ curl -X POST http://notification-api-service:8000/notifications \
 6. Enter inside the pod
 kubectl exec -it <pod-name> -- /bin/sh
 
+7. Logs for specific container inside pod
+kubectl logs <pod-name> -c <container-name>
+
+8. Temporary curl pod for debugging
+kubectl run curl-test --image=curlimages/curl --rm -it -- sh

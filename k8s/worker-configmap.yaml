@@ -5,3 +5,4 @@ metadata:
 data:
   API_URL: "http://notification-api-service:8000"
   POLL_INTERVAL: "20s"
+  SIDECAR_INTERVAL: "10s"

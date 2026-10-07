@@ -12,13 +12,25 @@ spec:
       labels:
         app: notification-worker
     spec:
+      volumes:
+      - name: ephemeral-storage
+        emptyDir: {}
       containers:
       - name: notification-worker
         image: notification-worker:latest
         imagePullPolicy: Never
+        envFrom:
+        - configMapRef:
+            name: notification-worker-config
+        volumeMounts:
+        - name: ephemeral-storage
+          mountPath: /app/logs
       - name: notification-sidecar
         image: notification-sidecar:latest
         imagePullPolicy: Never
         envFrom:
         - configMapRef:
             name: notification-worker-config
+        volumeMounts:
+        - name: ephemeral-storage
+          mountPath: /app/logs
