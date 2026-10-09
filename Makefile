@@ -4,16 +4,19 @@
 API_IMAGE := notification-api:latest
 WORKER_IMAGE := notification-worker:latest
 SIDECAR_IMAGE:=	notification-sidecar:latest
+MIGRATION_IMAGE := notification-migration:latest
 
 # Dockerfile paths
 API_DOCKERFILE := notification-api/api.dockerfile
 WORKER_DOCKERFILE := notification-worker/worker.dockerfile
 SIDECAR_DOCKERFILE:= notification-sidecar/sidecar.dockerfile
+MIGRATION_DOCKERFILE := notification-migration/migration.dockerfile
 
 # Build context directories
 API_CONTEXT := notification-api
 WORKER_CONTEXT := notification-worker
 SIDECAR_CONTEXT:= notification-sidecar
+MIGRATION_CONTEXT := notification-migration
 
 .PHONY: all build clean load push deploy help
 
@@ -21,7 +24,7 @@ SIDECAR_CONTEXT:= notification-sidecar
 all: build load
 
 # Build both Docker images
-build: build-api build-worker build-sidecar
+build: build-api build-worker build-sidecar build-migration
 
 build-api:
 	@echo "Building API image..."
@@ -35,15 +38,20 @@ build-sidecar:
 	@echo "Building Sidecar image..."
 	docker build -f $(SIDECAR_DOCKERFILE) -t $(SIDECAR_IMAGE) $(SIDECAR_CONTEXT)
 
+build-migration:
+	@echo "Building Migration image..."
+	docker build -f $(MIGRATION_DOCKERFILE) -t $(MIGRATION_IMAGE) $(MIGRATION_CONTEXT)
+
 # Delete images from minikube
 clean:
 	@echo "Deleting images from minikube..."
 	-minikube image rm $(API_IMAGE) 2>/dev/null || true
 	-minikube image rm $(WORKER_IMAGE) 2>/dev/null || true
 	-minikube image rm $(SIDECAR_IMAGE) 2>/dev/null || true
+	-minikube image rm $(MIGRATION_IMAGE) 2>/dev/null || true
 
 # Load images into minikube (equivalent to push for minikube)
-load: load-api load-worker load-sidecar
+load: load-api load-worker load-sidecar load-migration
 
 load-api:
 	@echo "Loading API image into minikube..."
@@ -56,6 +64,10 @@ load-worker:
 load-sidecar:
 	@echo "Loading Sidecar image into minikube..."
 	minikube image load $(SIDECAR_IMAGE)
+
+load-migration:
+	@echo "Loading Migration image into minikube..."
+	minikube image load $(MIGRATION_IMAGE)
 
 # Alias for load (more intuitive name)
 push: load
@@ -88,7 +100,7 @@ redeploy: rebuild deploy restart
 # Show status
 status:
 	@echo "=== Minikube Images ==="
-	@minikube image ls | grep -E "notification-api|notification-worker|notification-sidecar" || echo "No notification images found"
+	@minikube image ls | grep -E "notification-api|notification-worker|notification-sidecar|notification-migration" || echo "No notification images found"
 	@echo ""
 	@echo "=== Kubernetes Pods (all) ==="
 	@kubectl get pods  2>/dev/null || true
@@ -99,15 +111,17 @@ remove:
 # Help
 help:
 	@echo "Available targets:"
-	@echo "  make build      - Build both Docker images"
-	@echo "  make build-api  - Build only API image"
+	@echo "  make build        - Build all Docker images"
+	@echo "  make build-api    - Build only API image"
 	@echo "  make build-worker - Build only Worker image"
-	@echo "  make clean      - Delete images from minikube"
-	@echo "  make load       - Load images into minikube (alias: push)"
-	@echo "  make push       - Same as load"
-	@echo "  make rebuild    - Clean, build, and load"
-	@echo "  make deploy     - Apply Kubernetes manifests"
-	@echo "  make restart    - Restart deployments to pick up new images"
-	@echo "  make redeploy   - Full rebuild, deploy, and restart"
-	@echo "  make status     - Show image and deployment status"
-	@echo "  make help       - Show this help"
+	@echo "  make build-sidecar - Build only Sidecar image"
+	@echo "  make build-migration - Build only Migration image"
+	@echo "  make clean        - Delete images from minikube"
+	@echo "  make load         - Load images into minikube (alias: push)"
+	@echo "  make push         - Same as load"
+	@echo "  make rebuild      - Clean, build, and load"
+	@echo "  make deploy       - Apply Kubernetes manifests"
+	@echo "  make restart      - Restart deployments to pick up new images"
+	@echo "  make redeploy     - Full rebuild, deploy, and restart"
+	@echo "  make status       - Show image and deployment status"
+	@echo "  make help         - Show this help"

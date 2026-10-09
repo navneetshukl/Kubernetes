@@ -12,9 +12,19 @@ spec:
       labels:
         app: notification-api
     spec:
+      initContainers:
+      - name: migration
+        image: notification-migration:latest
+        imagePullPolicy: Never
+        envFrom:
+        - configMapRef:
+            name: notification-api-config
       containers:
       - name: notification-api
         image: notification-api:latest
         imagePullPolicy: Never
+        envFrom:
+        - configMapRef:
+            name: notification-api-config
         ports:
         - containerPort: 8080
