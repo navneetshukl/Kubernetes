@@ -1,2 +1,3 @@
-*.yaml linguist-detectable=true
-*.yml linguist-detectable=true
+# Ensure recursive match across all folders
+**/*.yaml linguist-detectable=true
+**/*.yml linguist-detectable=true
