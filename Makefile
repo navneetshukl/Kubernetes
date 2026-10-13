@@ -102,8 +102,11 @@ status:
 	@echo "=== Minikube Images ==="
 	@minikube image ls | grep -E "notification-api|notification-worker|notification-sidecar|notification-migration" || echo "No notification images found"
 	@echo ""
-	@echo "=== Kubernetes Pods (all) ==="
+	@echo "=== Kubernetes Resources (all) ==="
 	@kubectl get pods  2>/dev/null || true
+	@kubectl get pv  2>/dev/null || true
+	@kubectl get pvc  2>/dev/null || true
+	
 
 remove:
 	kubectl delete all --all
